@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --background: #F8F7F4;
+  --foreground: #1E2522;
+  --primary-terracotta: #B85838;
+  --primary-forest: #2E4F3E;
+  --verse-bg: #EEF2EB;
+  --verse-border: #DEE5D9;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 감성적인 스크롤바 */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D8DDD5;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B5BEB1;
+}
+
+/* 부드러운 펄스 애니메이션 */
+@keyframes softPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.008);
+  }
+}
+
+.animate-soft-pulse {
+  animation: softPulse 2s ease-in-out infinite;
+}
+
+/* ============================================================ */
+/* 성경 구절 및 모든 본문 텍스트 일반 굵기(font-weight: 400, normal) 통일 */
+/* 첫 줄/첫 번째 절 포함 모든 텍스트의 볼드체 완전 제거 */
+/* ============================================================ */
+.meditation-result-area h1,
+.meditation-result-area h2,
+.meditation-result-area h3,
+.meditation-result-area h4,
+.meditation-result-area h5,
+.meditation-result-area h6,
+.meditation-result-area blockquote,
+.meditation-result-area blockquote *,
+.meditation-result-area blockquote::first-line,
+.meditation-result-area blockquote:first-child,
+.meditation-result-area .meditation-verse-text,
+.meditation-result-area .meditation-verse-text *,
+.meditation-result-area .meditation-verse-text::first-line,
+.meditation-result-area p,
+.meditation-result-area p *,
+.meditation-result-area span:not(.meditation-section-label),
+.meditation-result-area strong,
+.meditation-result-area b,
+.meditation-result-area .meditation-body-text {
+  font-size: 0.9375rem !important; /* 15px */
+  font-weight: 400 !important; /* 첫 줄 및 첫 절 포함 100% 일반 두께(normal) */
+  line-height: 1.7 !important;
+  font-style: normal !important;
+  color: #2D352F !important;
+}
+
+/* 섹션 소제목 라벨만 은은하게 구분 */
+.meditation-section-label {
+  font-size: 0.75rem !important; /* 12px */
+  font-weight: 600 !important;
+  color: #5B6D57 !important;
+}
