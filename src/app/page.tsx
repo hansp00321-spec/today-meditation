@@ -22,23 +22,6 @@ const SUGGESTED_TOPICS = [
   '감사와 기쁨의 회복',
 ];
 
-// 이미지 및 서비스 예시 묵상 데이터
-const DEMO_MEDITATION_RAW = `[오늘의 말씀]
-“너희는 가만히 있어 내가 하나님 됨을 알지어다.”
-시편 46편 10절
-
-[마음 토닥이기]
-잠시 멈추어, 주님을 바라봅니다
-
-하루를 시작하며 우리는 해야 할 일과 해결해야 할 문제를 먼저 떠올립니다. 마음이 분주해질수록 잠시 멈추라는 주님의 음성은 더 멀게 느껴지기도 합니다.
-
-그러나 하나님은 모든 것을 스스로 감당하라고 말씀하지 않으십니다. 오늘 이 순간, 서두르는 마음을 내려놓고 주님이 이미 우리 곁에 계심을 기억해 보세요.
-
-고요함은 아무것도 하지 않는 시간이 아니라, 나보다 크신 하나님을 신뢰하는 시간입니다. 작은 숨을 고르고 그분의 인도하심에 마음을 맡겨 봅니다.
-
-[오늘의 기도]
-사랑의 주님, 분주한 하루의 시작과 끝에서 내 힘으로만 버티려 했던 짐을 내려놓습니다. 주님의 크신 품 안에서 참된 안식을 얻게 하소서. 예수님의 이름으로 기도합니다. 아멘.`;
-
 // 묵상 데이터 구조 인터페이스
 interface ParsedMeditation {
   verse: string;
@@ -430,13 +413,6 @@ export default function TodayMeditationPage() {
     }, 1500);
   };
 
-  // 테스트용 데모 묵상 미리보기
-  const handleLoadDemo = () => {
-    setError(null);
-    setResult(cleanMeditationText(DEMO_MEDITATION_RAW));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   // 파싱된 묵상 데이터
   const parsedMeditation = result ? parseMeditationContent(result) : null;
 
@@ -620,19 +596,10 @@ export default function TodayMeditationPage() {
 
               {/* 에러 메시지 알림 */}
               {error && (
-                <div className="p-3.5 rounded-xl bg-[#FDF2F0] border border-[#F5C6CB] text-[#9E2B25] text-xs space-y-2 mt-2">
+                <div className="p-3.5 rounded-xl bg-[#FDF2F0] border border-[#F5C6CB] text-[#9E2B25] text-xs space-y-1 mt-2">
                   <div className="flex items-start gap-2">
                     <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                     <span className="leading-relaxed flex-1">{error}</span>
-                  </div>
-                  <div className="flex justify-end pt-1">
-                    <button
-                      type="button"
-                      onClick={handleLoadDemo}
-                      className="text-2xs text-[#B85838] font-bold hover:underline bg-white/80 px-2.5 py-1 rounded-md"
-                    >
-                      예시 화면 바로 확인하기 &rarr;
-                    </button>
                   </div>
                 </div>
               )}
@@ -657,17 +624,6 @@ export default function TodayMeditationPage() {
                   ) : (
                     <span>오늘의 묵상 시작하기</span>
                   )}
-                </button>
-              </div>
-
-              {/* 데모 미리보기 링크 */}
-              <div className="text-center pt-2">
-                <button
-                  type="button"
-                  onClick={handleLoadDemo}
-                  className="text-2xs text-[#8A9086] hover:text-[#2E4F3E] transition-colors underline decoration-dotted"
-                >
-                  Make.com 연결 전 예시 묵상 화면 미리보기
                 </button>
               </div>
             </div>
