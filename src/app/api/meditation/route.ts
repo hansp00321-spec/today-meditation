@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: 'CONFIG_REQUIRED',
           message:
-            'Make.com 웹훅 URL이 아직 설정되지 않았습니다. .env.local 파일 또는 상단 설정 버튼에서 실제 Make.com 웹훅 URL을 입력해 주세요.',
+            'Make.com 웹훅 URL이 아직 설정되지 않았습니다. .env.local 파일 또는 환경 변수에 실제 Make.com 웹훅 URL을 설정해 주세요.',
         },
         { status: 400 }
       );

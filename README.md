@@ -30,16 +30,12 @@ React, Next.js (App Router), Tailwind CSS를 기반으로 제작되었으며, Ma
 
 ## ⚙️ Make.com 웹훅 URL 설정 방법
 
-### 방법 1: `.env.local` 파일 수정 (권장)
 프로젝트 폴더 내 `.env.local` 파일을 열고 본인의 Make.com 웹훅 URL로 교체합니다.
 
 ```env
 NEXT_PUBLIC_MAKE_WEBHOOK_URL=https://hook.eu2.make.com/본인의_웹훅_주소
 MAKE_WEBHOOK_URL=https://hook.eu2.make.com/본인의_웹훅_주소
 ```
-
-### 방법 2: 웹 화면 상단 [웹훅 설정] 버튼 사용
-웹페이지 오른쪽 상단의 **[웹훅 설정]** 버튼을 눌러 브라우저에서 바로 본인의 웹훅 URL을 입력하고 저장할 수 있습니다. (입력 시 브라우저에 안전하게 저장됩니다.)
 
 ---
 

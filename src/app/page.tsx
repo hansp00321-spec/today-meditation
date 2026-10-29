@@ -4,8 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Loader2,
   Check,
-  Settings,
-  HelpCircle,
   AlertCircle,
   X,
   Heart,
@@ -211,11 +209,6 @@ export default function TodayMeditationPage() {
   const [feedbackContent, setFeedbackContent] = useState('');
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
 
-  // 웹훅 설정 모달 & 커스텀 URL
-  const [showSettings, setShowSettings] = useState(false);
-  const [customWebhookUrl, setCustomWebhookUrl] = useState('');
-  const [showHelpGuide, setShowHelpGuide] = useState(false);
-
   const worryInputRef = useRef<HTMLTextAreaElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
 
@@ -236,11 +229,6 @@ export default function TodayMeditationPage() {
     const date = now.getDate();
     const day = days[now.getDay()];
     setTodayString(`${year}년 ${month}월 ${date}일 ${day}`);
-
-    const savedUrl = localStorage.getItem('user_make_webhook_url');
-    if (savedUrl) {
-      setCustomWebhookUrl(savedUrl);
-    }
   }, []);
 
   // 토스트 메시지 표시
@@ -249,14 +237,6 @@ export default function TodayMeditationPage() {
     setTimeout(() => {
       setToastMessage(null);
     }, 3500);
-  };
-
-  // 커스텀 웹훅 URL 저장
-  const handleSaveSettings = (e: React.FormEvent) => {
-    e.preventDefault();
-    localStorage.setItem('user_make_webhook_url', customWebhookUrl.trim());
-    setShowSettings(false);
-    showToast('웹훅 설정이 저장되었습니다.');
   };
 
   // 묵상 시작하기 제출 핸들러
@@ -275,7 +255,6 @@ export default function TodayMeditationPage() {
         },
         body: JSON.stringify({
           worry: worry.trim(),
-          customUrl: customWebhookUrl.trim(),
         }),
       });
 
@@ -299,9 +278,8 @@ export default function TodayMeditationPage() {
       if (!response.ok || !responseData.success) {
         if (responseData.error === 'CONFIG_REQUIRED') {
           setError(
-            'Make.com 웹훅 URL 설정이 필요합니다. 우측 상단 [웹훅 설정]에서 실제 Webhook URL을 등록해 주세요.'
+            'Make.com 웹훅 URL 설정이 필요합니다. 환경 변수(.env.local)에 Webhook URL을 설정해 주세요.'
           );
-          setShowSettings(true);
         } else {
           setError(
             responseData.message ||
@@ -366,9 +344,9 @@ export default function TodayMeditationPage() {
 
   // 결과부 버튼 4: 후원 계좌번호 복사하기
   const handleCopyDonationAccount = () => {
-    const accountInfo = '농협 352-2382-9181-93 (예금주: 한상필)';
+    const accountInfo = '우리은행 201-772033-18-280 (예금주: 한상필)';
     const toastNotice =
-      '후원 계좌번호가 복사되었습니다. (농협 352-2382-9181-93 한상필)\n마음을 더해주셔서 감사합니다!';
+      '후원 계좌번호가 복사되었습니다. (우리은행 201-772033-18-280 한상필)\n마음을 더해주셔서 감사합니다!';
 
     if (navigator.clipboard) {
       navigator.clipboard.writeText(accountInfo).then(() => {
@@ -435,19 +413,11 @@ export default function TodayMeditationPage() {
         {/* 상단 공통 헤더                                                */}
         {/* ============================================================ */}
         <header className="pt-2 pb-5">
-          {/* 최상단 서브 문구 및 설정 아이콘 */}
-          <div className="flex items-center justify-between mb-4">
+          {/* 최상단 서브 문구 */}
+          <div className="mb-4">
             <span className="text-xs sm:text-sm text-[#737A70]">
               오늘도 말씀 안에서 평안한 하루를 보내세요.
             </span>
-            <button
-              onClick={() => setShowSettings(!showSettings)}
-              className="text-xs text-[#8A9386] hover:text-[#2E4F3E] p-1.5 rounded-lg hover:bg-[#EAECE6] transition-colors flex items-center gap-1"
-              title="Make.com 웹훅 URL 설정"
-            >
-              <Settings className="w-3.5 h-3.5 text-[#6D7769]" />
-              <span className="text-3xs hidden sm:inline text-[#6D7769]">설정</span>
-            </button>
           </div>
 
           {/* 메인 타이틀: 토닥 QT */}
@@ -463,69 +433,6 @@ export default function TodayMeditationPage() {
 
         {/* 상단 구분선 */}
         <hr className="border-t border-[#E5E5DF] mb-7" />
-
-        {/* ============================================================ */}
-        {/* Make.com 웹훅 URL 설정 간이 패널                             */}
-        {/* ============================================================ */}
-        {showSettings && (
-          <div className="mb-6 p-4 rounded-2xl bg-white border border-[#D9DCD6] shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xs font-bold text-[#2E4F3E] flex items-center gap-1.5">
-                <Settings className="w-3.5 h-3.5" />
-                Make.com 웹훅 URL 설정
-              </h3>
-              <button
-                type="button"
-                onClick={() => setShowSettings(false)}
-                className="text-xs text-[#9B8C7D] hover:text-[#5C4F42]"
-              >
-                닫기
-              </button>
-            </div>
-            <p className="text-2xs text-[#7A8376] mb-3 leading-relaxed">
-              기본값은 <code>.env.local</code> 파일의 주소를 사용하며, 여기서 직접
-              URL을 입력하여 브라우저에서 바로 테스트할 수도 있습니다.
-            </p>
-            <form onSubmit={handleSaveSettings} className="space-y-2">
-              <input
-                type="url"
-                value={customWebhookUrl}
-                onChange={(e) => setCustomWebhookUrl(e.target.value)}
-                placeholder="https://hook.eu2.make.com/..."
-                className="w-full text-xs px-3 py-2 rounded-lg bg-[#F8F7F4] border border-[#D9DCD6] focus:outline-none focus:ring-1 focus:ring-[#2E4F3E] text-[#1E2522]"
-              />
-              <div className="flex items-center justify-between pt-1">
-                <button
-                  type="button"
-                  onClick={() => setShowHelpGuide(!showHelpGuide)}
-                  className="text-2xs text-[#2E4F3E] underline flex items-center gap-0.5"
-                >
-                  <HelpCircle className="w-3 h-3" />
-                  Make.com 연동 안내
-                </button>
-                <button
-                  type="submit"
-                  className="px-3 py-1.5 text-xs font-semibold text-white bg-[#2E4F3E] hover:bg-[#243E30] rounded-lg transition-colors"
-                >
-                  저장하기
-                </button>
-              </div>
-            </form>
-
-            {showHelpGuide && (
-              <div className="mt-3 pt-3 border-t border-[#EAECE6] text-2xs text-[#6B7268] space-y-1">
-                <div className="font-semibold text-[#2E4F3E]">
-                  💡 Make.com 시나리오 안내:
-                </div>
-                <div>1. Custom Webhook 모듈에서 Webhook URL 복사</div>
-                <div>2. 앱에서 <code>{`{ "worry": "..." }`}</code> 형식으로 전송됨</div>
-                <div>
-                  3. 끝에 Webhook Response 모듈 추가 후 Body에 묵상 내용 반환
-                </div>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* ============================================================ */}
         {/* 화면 1: 고민 입력 화면 (이미지 2와 100% 일치)                 */}
